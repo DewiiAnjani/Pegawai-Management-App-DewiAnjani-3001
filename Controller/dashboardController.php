@@ -12,6 +12,53 @@ class dashboardController{
         return view('dashboard',['result' => $data]);
     }
 
+    // regits
+    static function regist() {
+        if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["password"])) {
+            $username = $_POST["username"];
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+    
+            $regist_result = dashboardModel::regist($username, $email, $password);
+            
+            if ($regist_result) {
+                echo '<script>alert("Berhasil.");</script>';
+                header("Location: " . BASEURL . "login");
+                exit();
+            } else {
+                // Registrasi gagal
+                echo '<script>alert("Registrasi gagal. Silakan coba lagi.");</script>';
+            }
+        } else {
+            // Jika data POST tidak lengkap
+            echo '<script>alert("Data registrasi tidak lengkap. Silakan coba lagi.");</script>';
+        }
+    }
+
+        // Login Auth
+        static function login() {
+            if (isset($_POST["username"]) && isset($_POST["password"])) {
+                $username = $_POST["username"];
+                $password = $_POST["password"];
+        
+                $login_result = dashboardModel::login($username, $password);
+                
+                if ($login_result) {
+                    header("Location: " . BASEURL . "dashboard");
+                    exit();
+                } else {
+                    // Login gagal
+                    echo '<script>alert("Login gagal. Silakan coba lagi.");</script>';
+                    return view('login');
+            }
+        } else {
+            // Jika data POST tidak lengkap
+            echo '<script>alert("Data login tidak lengkap. Silakan coba lagi.");</script>';
+            return view('login');
+    
+        }
+        }
+
     // TAMBAH DATA
 
     static function tambahData(){
