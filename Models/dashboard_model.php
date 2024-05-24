@@ -13,6 +13,32 @@ static function getAll(){
     return $result;
 }
 
+static function login($username, $password) {
+    global $conn;
+    $stmt = $conn->prepare("SELECT * FROM regist WHERE username = ? AND password = ?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows > 0) {
+        return true; // Login berhasil
+    } else {
+        return false; // Login gagal
+    }
+}
+
+static function regist($username, $email, $password) {
+    global $conn;
+    $stmt = $conn->prepare("INSERT INTO regist (username, email,  password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $username, $email, $password);
+    $success = $stmt->execute();
+    $stmt->close();
+
+    return $success; // Mengembalikan true jika insert berhasil, false jika gagal
+}
+
+
 static function insertData($nama, $email, $no_hp, $bidang, $status, $foto_path) {
     global $conn;
 
